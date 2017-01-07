@@ -1,0 +1,30 @@
+<html>
+<body>
+    <h1>Fixer.pe</h1>
+
+    {% if resultado %}
+        <h3>Resultado: {{ resultado }}</h3>
+    {% endif %}
+
+    <form action="" method="post">
+        Moneda origen:
+        <select name="origen">
+            {% for moneda in monedas %}
+                <option value="{{ moneda }}">{{ moneda }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        Moneda destino:
+        <select name="destino">
+            {% for moneda in monedas %}
+                <option value="{{ moneda }}">{{ moneda }}</option>
+            {% endfor %}
+        </select>
+        <br>
+        Monto:
+        <input type="text" name="monto">
+        <br>
+        <input type="submit" value="Convertir">
+    </form>
+</body>
+</html>

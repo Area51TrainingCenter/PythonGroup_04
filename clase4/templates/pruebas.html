@@ -1,0 +1,29 @@
+<html>
+<head>
+    <link rel="stylesheet" href="/static/css/estilos.css">
+</head>
+<body>
+    <h1>
+        {% if verdad %}
+            Es verdad
+        {% else %}
+            Es Mentira
+        {% endif %}
+    </h1>
+
+    <h2>Desayuno:</h2>
+    <ul>
+        {% for ingrediente in lista %}
+            <li>{{ ingrediente }}</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Datos personales</h2>
+    <ul>
+        <li>Nombre: {{ pepito.nombre }}</li>
+        <li>Edad: {{ pepito.edad }}</li>
+        <li>Distrito: {{ pepito.distrito }}</li>
+    </ul>
+    <script src="/static/js/aplicacion.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<html>
+<body>
+    <form action="/agregar" method="post">
+        Tarea:
+        <input type="text" name="tarea">
+        <input type="submit">
+    </form>
+
+    <ul>
+        {% for tarea in tareas %}
+            <li>{{ tarea.id }} {{ tarea.nombre }} <a href="/borrar/{{ tarea.id }}">Borrar</a></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Búsqueda de Juguetes {% endblock %}
+
+{% block contenido %}
+    {% include 'navbar.html' %}
+    <h1>Buscar Juguetes</h1>
+    <form action="">
+        Nombre: <input type="text" name="q" value="{{ request.GET.q }}">
+        <input type="submit">
+    </form>
+
+    {% if request.GET.q %}
+        <ul>
+            {% for producto in object_list %}
+                <li>{{ producto.nombre }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}

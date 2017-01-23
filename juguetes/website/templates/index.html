@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block contenido %}
+    <h1>Bienvenido {{ nombre }}!</h1>
+    <img src="{% static 'img/gatito.jpg' %}" alt="" height="100">
+    {% include 'navbar.html' %}
+    <h3>Últimos productos</h3>
+    <ul>
+        {% for producto in productos %}
+            <li><a href="{% url 'detalle_producto' pk=producto.id %}">{{ producto.nombre }}</a></li>
+        {% endfor %}
+    </ul>
+{% endblock %}

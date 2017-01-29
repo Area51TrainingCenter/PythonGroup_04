@@ -2,4 +2,11 @@
 <ul>
     <li><a href="{% url 'home' %}">Home</a></li>
     <li><a href="{% url 'busqueda' %}">Búsqueda</a></li>
+    <li><a href="{% url 'contacto' %}">Contacto</a></li>
+    {% if request.user.is_authenticated %}
+        <li><a href="{% url 'perfil' %}">Usuario: {{ request.user.username }}</a> <a href="{% url 'logout' %}">Cerrar Sesión</a></li>
+    {% else %}
+        <li><a href="{% url 'registro' %}">Registro</a></li>
+        <li><a href="{% url 'login' %}">Login</a></li>
+    {% endif %}
 </ul>

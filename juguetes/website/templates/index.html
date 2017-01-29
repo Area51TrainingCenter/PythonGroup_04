@@ -2,7 +2,12 @@
 {% load static %}
 
 {% block contenido %}
-    <h1>Bienvenido {{ nombre }}!</h1>
+    {% if request.user.is_authenticated %}
+        <h1>Bienvenido {{ request.user.first_name }}!</h1>
+    {% else %}
+        <h1>Juguetería Polo Norte</h1>
+    {% endif %}
+
     <img src="{% static 'img/gatito.jpg' %}" alt="" height="100">
     {% include 'navbar.html' %}
     <h3>Últimos productos</h3>

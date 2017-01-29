@@ -13,7 +13,7 @@
     {% if request.GET.q %}
         <ul>
             {% for producto in object_list %}
-                <li>{{ producto.nombre }}</li>
+                <li><a href="{% url 'detalle_producto' pk=producto.id %}">{{ producto.nombre }}</a></li>
             {% endfor %}
         </ul>
     {% endif %}

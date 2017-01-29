@@ -8,6 +8,7 @@
         <li>SKU: {{ producto.sku }}</li>
         <li>Descripción: {{ producto.descripcion }}</li>
         <li>Precio: S/. {{ producto.precio }}</li>
+        <li>Unidades Disponibles: {{ producto.stock }}</li>
         <li>Categorías:
             <ul>
                 {% for cat in producto.categoria.all %}

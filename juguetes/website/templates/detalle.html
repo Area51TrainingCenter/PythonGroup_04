@@ -3,6 +3,7 @@
 {% block titulo %}{{ producto.nombre }}{% endblock %}
 
 {% block contenido %}
+    {% include 'navbar.html' %}
     <h2>{{ producto.nombre }}</h2>
     <ul>
         <li>SKU: {{ producto.sku }}</li>
@@ -17,4 +18,31 @@
             </ul>
         </li>
     </ul>
+
+    {% if request.user.is_authenticated and producto.has_stock %}
+        <button id="comprar">Comprar</button>
+    {% endif %}
+
+{% endblock %}
+
+{% block js %}
+    <script>
+        $(function() {
+            $('#comprar').click(function(e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '{% url "agregar_carrito" %}',
+                    type: 'POST',
+                    data: {
+                        id: {{ producto.pk }},
+                        csrfmiddlewaretoken: '{{ csrf_token }}'
+                    },
+                    success: function(response){
+                        alert('Producto agregado al carrito');
+                        location.reload();
+                    }
+                });
+            });
+        });
+    </script>
 {% endblock %}

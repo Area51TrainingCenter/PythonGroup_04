@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Checkout{% endblock %}
+
+{% block contenido %}
+    {% include 'navbar.html' %}
+    <h1>Checkout</h1>
+    <h3>Productos</h3>
+    <ul>
+        {% for producto in productos %}
+            <li>{{ producto.nombre }} - S/{{ producto.precio }}</li>
+        {% endfor %}
+    </ul>
+    <h4>Total: S/{{ total }}</h4>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit">
+    </form>
+{% endblock %}

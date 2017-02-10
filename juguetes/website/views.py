@@ -1,4 +1,7 @@
+from django.db.models import Sum
+from django.http import JsonResponse
 from django.shortcuts import redirect
+from django.views import View
 from django.views.generic import DetailView
 from django.views.generic import FormView
 from django.views.generic import ListView
@@ -6,9 +9,9 @@ from django.views.generic import TemplateView
 
 import requests
 
+from ordenes.models import Orden
 from productos.models import Producto
-from website.forms import ContactoForm
-from website.models import Contacto
+from website.forms import ContactoForm, CheckoutForm
 
 
 class Home(TemplateView):
@@ -16,8 +19,7 @@ class Home(TemplateView):
 
     def get_context_data(self, **kwargs):
         contexto = super(Home, self).get_context_data(**kwargs)
-        contexto['nombre'] = 'Moisés'
-        contexto['productos'] = Producto.objects.all().order_by('-id')[:5]
+        contexto['productos'] = Producto.objects.in_stock().order_by('-id')[:5]
         return contexto
 
 
@@ -55,3 +57,67 @@ class ContactoView(FormView):
 class DetalleProducto(DetailView):
     template_name = 'detalle.html'
     model = Producto
+
+
+class AgregarCarrito(View):
+    def post(self, request):
+        pk = request.POST['id']
+        if 'carrito' not in request.session:
+            request.session['carrito'] = []
+
+        if pk not in request.session['carrito']:
+            request.session['carrito'] += [pk]
+        return JsonResponse({'success': True})
+
+
+class Carrito(ListView):
+    template_name = 'carrito.html'
+    model = Producto
+
+    def get_queryset(self):
+        queryset = super(Carrito, self).get_queryset()
+        queryset = queryset.filter(id__in=self.request.session.get('carrito', []))
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        context = super(Carrito, self).get_context_data(**kwargs)
+        context['total'] = self.get_queryset().aggregate(Sum('precio'))['precio__sum']
+        return context
+
+
+class Checkout(FormView):
+    template_name = 'checkout.html'
+    form_class = CheckoutForm
+
+    def get_context_data(self, **kwargs):
+        contexto = super(Checkout, self).get_context_data(**kwargs)
+        productos = Producto.objects.filter(id__in=self.request.session.get('carrito', []))
+        contexto['total'] = productos.aggregate(Sum('precio'))['precio__sum']
+        contexto['productos'] = productos
+        return contexto
+
+    def form_valid(self, form):
+        direccion = form.cleaned_data['direccion']
+        usuario = self.request.user
+        contexto = self.get_context_data()
+        total = contexto['total']
+        productos = contexto['productos']
+        estado = 'recibido'
+
+        orden = Orden()
+        orden.usuario = usuario
+        orden.precio = total
+        orden.direccion = direccion
+        orden.estado = estado
+        orden.save()
+
+        for producto in productos:
+            orden.productos.add(producto)
+
+        del self.request.session['carrito']
+
+        return redirect('gracias')
+
+
+class Gracias(TemplateView):
+    template_name = 'gracias.html'

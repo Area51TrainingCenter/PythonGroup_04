@@ -34,6 +34,8 @@ class Login(FormView):
 
 class Logout(View):
     def get(self, request):
+        if 'carrito' in request.session:
+            del request.session['carrito']
         logout(request)
         return redirect('home')
 

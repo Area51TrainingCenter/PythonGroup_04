@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block titulo %}Carrito{% endblock %}
+
+{% block contenido %}
+    {% include 'navbar.html' %}
+    <h1>Carrito de Compras</h1>
+    <ul>
+        {% for producto in object_list %}
+            <li>{{ producto.nombre }} - S/{{ producto.precio }}</li>
+        {% endfor %}
+    </ul>
+    <h4>Total: S/{{ total }}</h4>
+    <a href="{% url 'checkout' %}">Checkout!</a>
+{% endblock %}

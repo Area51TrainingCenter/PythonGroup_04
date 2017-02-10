@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,5 +12,8 @@
 
     <hr>
     &copy; 2017 - Area 51
+
+    <script src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+    {% block js %}{% endblock %}
 </body>
 </html>

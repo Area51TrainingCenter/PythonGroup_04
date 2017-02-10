@@ -11,7 +11,7 @@ class AlmacenAdmin(admin.ModelAdmin):
 class StockAdmin(admin.ModelAdmin):
     list_display = ('producto', 'almacen', 'cantidad',)
     list_filter = ('almacen', 'producto',)
-    search_fields = ('producto',)
+    search_fields = ('producto__nombre',)
 
 admin.site.register(Almacen, AlmacenAdmin)
 admin.site.register(Stock, StockAdmin)
